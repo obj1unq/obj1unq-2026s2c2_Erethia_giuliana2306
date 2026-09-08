@@ -12,6 +12,10 @@ object rolando {
     method artefactosQueLleva() {
         return mochila 
     }
+    method llegarAlCastillo() {
+        castillo.guardarArtefactos(mochila)
+        mochila.clear()
+    }
 }
 
 /**/
@@ -30,4 +34,15 @@ object collarDivino {
 
 object armaduraDeAceroValyrio {
 
+}
+
+object castillo {
+    var artefactos = []
+
+    method artefactos() {
+        return artefactos 
+    }
+    method guardarArtefactos(_mochila) {
+         _mochila.forEach({ artefacto => artefactos.add(artefacto)})
+    }
 }

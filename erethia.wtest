@@ -6,4 +6,14 @@ describe "Erethia" {
         rolando.encuentraArtefacto(collarDivino)
         assert.equals([espadaDelDestino, libroDeHechizos], rolando.artefactosQueLleva())
     }
+    test "dejar primeros artefactos en el castillo" {
+        rolando.encuentraArtefacto(espadaDelDestino)
+        rolando.encuentraArtefacto(libroDeHechizos)
+        rolando.llegarAlCastillo()
+        assert.equals([espadaDelDestino, libroDeHechizos], castillo.artefactos())
+        rolando.encuentraArtefacto(collarDivino)
+        rolando.llegarAlCastillo()
+        assert.equals([espadaDelDestino, libroDeHechizos, collarDivino], castillo.artefactos())
+    }
 }
+
