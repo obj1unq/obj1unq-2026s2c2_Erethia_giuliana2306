@@ -3,6 +3,7 @@ object rolando {
     var capacidadDeMochila = 2
     var totalDeArtefactos = []
     var historia = []
+    var poderBase = 0
 
     method capacidadDeMochila(_capacidadDeMochila) {
         capacidadDeMochila = _capacidadDeMochila
@@ -12,6 +13,9 @@ object rolando {
         if (mochila.size() < capacidadDeMochila) {
             mochila.add(_artefacto)
         }
+    }
+    method poderBase() {
+        return poderBase
     }
     method historia() {
         return historia
@@ -40,8 +44,22 @@ object rolando {
 
 
 object espadaDelDestino {
+    var usosDeLaEspada = 0
 
+    method poderQueAporta(personaje, bloque) {
+    if (usosDeLaEspada == 0) {
+        usosDeLaEspada = usosDeLaEspada + 1
+        return bloque.apply(personaje)
+    } else {
+        usosDeLaEspada = usosDeLaEspada + 1
+        return bloque.apply(personaje) / 2
+    }
 }
+}
+/*
+Para aplicar : espadaDelDestino.poderQueAporta( self, { personaje => personaje.poderBase() }
+)
+*/
 
 object libroDeHechizos {
 
