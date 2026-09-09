@@ -1,6 +1,7 @@
 object rolando {
     var mochila = []
     var capacidadDeMochila = 2
+    var totalDeArtefactos = []
 
     method capacidadDeMochila(_capacidadDeMochila) {
         capacidadDeMochila = _capacidadDeMochila
@@ -9,16 +10,28 @@ object rolando {
         if (mochila.size() < capacidadDeMochila) 
         mochila.add(_artefacto)
     }
-    method artefactosQueLleva() {
+    method artefactosEnLaMochila() {
         return mochila 
     }
     method llegarAlCastillo() {
         castillo.guardarArtefactos(mochila)
         mochila.clear()
     }
+    method agregarArtefactos(_artefactos) {
+        _artefactos.forEach({artefacto => totalDeArtefactos.add(artefacto)})
+    }
+    method artefactosQueLleva() {
+        totalDeArtefactos.clear()
+        self.agregarArtefactos(self.artefactosEnLaMochila())
+        self.agregarArtefactos(castillo.artefactos())
+        return totalDeArtefactos
+    }
+    method tieneArtefacto(_artefacto) {
+        self.artefactosQueLleva()
+        return totalDeArtefactos.any({artefacto => artefacto == _artefacto})
+    }
 }
 
-/**/
 
 object espadaDelDestino {
 
