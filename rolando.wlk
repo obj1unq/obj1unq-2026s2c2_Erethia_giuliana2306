@@ -48,6 +48,7 @@ object rolando {
     }
     method pelearEnBatalla ()  {
         poderBase = poderBase + 1
+        
     }
 }
 
@@ -73,6 +74,9 @@ object libroDeHechizos {
     method agregarHechizo(hechizo) {
         hechizos.add(hechizo)
     }
+    method hechizos() {
+        return hechizos
+    }
 
 }
 
@@ -93,6 +97,7 @@ object inivisibilidad {
 object invocacion {
 
     method poderQueAporta(personaje) {
+        (castillo.artefactos().map{artefacto => artefacto.poderQueAPorta(personaje)}).max()
     }
 }
 
