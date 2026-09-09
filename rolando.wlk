@@ -2,13 +2,19 @@ object rolando {
     var mochila = []
     var capacidadDeMochila = 2
     var totalDeArtefactos = []
+    var historia = []
 
     method capacidadDeMochila(_capacidadDeMochila) {
         capacidadDeMochila = _capacidadDeMochila
     }
     method encuentraArtefacto(_artefacto) {
-        if (mochila.size() < capacidadDeMochila) 
-        mochila.add(_artefacto)
+         historia.add(_artefacto)
+        if (mochila.size() < capacidadDeMochila) {
+            mochila.add(_artefacto)
+        }
+    }
+    method historia() {
+        return historia
     }
     method artefactosEnLaMochila() {
         return mochila 
