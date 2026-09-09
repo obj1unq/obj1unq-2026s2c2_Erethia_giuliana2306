@@ -1,9 +1,9 @@
 object rolando {
-    var mochila = []
+    var mochila = #{}
     var capacidadDeMochila = 2
     var totalDeArtefactos = []
     var historia = []
-    var poderBase = 0
+    var poderBase = 5
 
     method capacidadDeMochila(_capacidadDeMochila) {
         capacidadDeMochila = _capacidadDeMochila
@@ -40,41 +40,86 @@ object rolando {
         self.artefactosQueLleva()
         return totalDeArtefactos.any({artefacto => artefacto == _artefacto})
     }
+    method poderDePelea() {
+        return self.poderBase() + mochila.sum({artefacto => artefacto.poderQueAporta(self)})
+    }
+    method cambiarPoderBase(_poderBase) {
+        poderBase = _poderBase
+    }
+    method pelearEnBatalla ()  {
+        poderBase = poderBase + 1
+    }
 }
 
 
 object espadaDelDestino {
     var usosDeLaEspada = 0
 
-    method poderQueAporta(personaje, bloque) {
+    method poderQueAporta(personaje) {
     if (usosDeLaEspada == 0) {
         usosDeLaEspada = usosDeLaEspada + 1
-        return bloque.apply(personaje)
+        return personaje.poderBase()
     } else {
         usosDeLaEspada = usosDeLaEspada + 1
-        return bloque.apply(personaje) / 2
+        return personaje.poderBase() / 2
     }
 }
 }
-/*
-Para aplicar : espadaDelDestino.poderQueAporta( self, { personaje => personaje.poderBase() }
-)
-*/
+
 
 object libroDeHechizos {
+    var hechizos = []
+
+    method agregarHechizo(hechizo) {
+        hechizos.add(hechizo)
+    }
 
 }
 
-object collarDivino {
+object bendicion {
 
+    method poderQueAPorta(personaje) {
+        return 4
+    }
+}
+
+object inivisibilidad {
+
+    method poderQueAporta(personaje) {
+        return personaje.poderBase()
+    }
+}
+
+object invocacion {
+
+    method poderQueAporta(personaje) {
+    }
+}
+
+object collarDivino {
+    var usoDelCollar = 0
+
+    method poderQueAporta(personaje) {
+        if (personaje.poderBase() > 6) {
+            usoDelCollar = usoDelCollar + 1
+            return 3 * usoDelCollar -1
+        } else {
+            usoDelCollar = usoDelCollar + 1
+            return 3
+        }
+
+    }
 }
 
 object armaduraDeAceroValyrio {
 
+    method poderQueAporta(personaje) {
+        return 6
+    }
 }
 
 object castillo {
-    var artefactos = []
+    var artefactos = #{}
 
     method artefactos() {
         return artefactos 
