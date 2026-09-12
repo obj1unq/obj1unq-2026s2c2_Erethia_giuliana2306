@@ -218,10 +218,20 @@ Si Rolando tiene de base 15, la espada, la armadura y el collar, entonces cuenta
 * Elegir un polimorfismo e indicar: 
 
    - ¿Qué nombre le pondrías al tipo de los objetos polimórficos?
+      Artefacto
    - ¿Qué mensajes componen ese tipo?
+      poderQueAporta(_personaje)
+      usosDeArtefacto()
    - ¿Quiénes usan los mensajes polimórficos?
+     los personajes, como Rolando.
    
 * Respecto de las colecciones definidas:
 
     - ¿Qué **tipo** de elementos contienen?
+     Contienen: 
+     -enemigos
+     -artefactos
+     -hechizos
     - ¿Qué mensaje polimórfico (perteneciente al tipo mencionado) utilizaste dentro de un bloque?
+    utilice dentro de un bloque {artefacto => artefacto.poderQueAporta(self)}, el mensaje polimorfico
+     es poderQueAporta(_personaje).
