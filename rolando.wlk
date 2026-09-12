@@ -4,6 +4,7 @@ object rolando {
     var totalDeArtefactos = #{}
     var encuentros = []
     var poderBase = 5
+    var enemigos = [caterina, astra, archibaldo]
 
     method capacidadDeMochila(_capacidadDeMochila) {
         capacidadDeMochila = _capacidadDeMochila
@@ -45,8 +46,25 @@ object rolando {
         mochila.forEach({artefacto => artefacto.usosDeArtefacto()})
         poderBase = poderBase + 1
     }
+    method enemigosQueVence() {
+        return enemigos.filter({enemigo => enemigo.poderDePelea() < self.poderDePelea()})
+    }
+    method moradasConquistables() {
+        return self.enemigosQueVence().map({enemigo => enemigo.morada()})
+    }
+    method esPoderoso() {
+        return self.enemigosQueVence() == enemigos
+    }
+   method puedeVencerA(_enemigo) {
+    return self.artefactosDeLaMochila().any({artefacto =>
+                                             poderBase + artefacto.poderQueAporta(self) > _enemigo.poderDePelea()})
 }
-
+   method artefactosParaVencer(_enemigo) {
+    return self.artefactosDeLaMochila().find({artefacto =>
+                                              poderBase + artefacto.poderQueAporta(self) > _enemigo.poderDePelea()})
+}
+}
+s
 object espadaDelDestino {
     var usos = 0
 

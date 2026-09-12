@@ -68,5 +68,42 @@ describe "Erethia" {
         rolando.pelearEnBatalla()
         assert.equals(0, libroDeHechizos.poderQueAporta(rolando))
     }
+    test "Enemigos" {
+        rolando.capacidadDeMochila(3)
+        rolando.encuentraArtefacto(espadaDelDestino)
+        rolando.encuentraArtefacto(armaduraDeAceroValyrio)
+        rolando.encuentraArtefacto(collarDivino)
+        assert.equals(19, rolando.poderDePelea())
+        assert.equals([astra,archibaldo], rolando.enemigosQueVence())
+        assert.equals(["torre de marfil","palacio de marmol"], rolando.moradasConquistables())
+    }
+   test "Es poderoso" {
+    rolando.modificarPoderBase(10)
+    rolando.capacidadDeMochila(3)
+    rolando.encuentraArtefacto(espadaDelDestino)
+    rolando.encuentraArtefacto(armaduraDeAceroValyrio)
+    rolando.encuentraArtefacto(collarDivino)
+    assert.equals(29, rolando.poderDePelea())
+    assert.equals([caterina, astra, archibaldo], rolando.enemigosQueVence())
+    assert.equals(["fortaleza de acero","torre de marfil","palacio de marmol"], rolando.moradasConquistables())
+    assert.equals(true, rolando.esPoderoso())
+    }
+    test "No es poderoso" {
+    rolando.capacidadDeMochila(3)
+    rolando.encuentraArtefacto(espadaDelDestino)
+    rolando.encuentraArtefacto(armaduraDeAceroValyrio)
+    rolando.encuentraArtefacto(collarDivino)
+    assert.equals(19, rolando.poderDePelea())
+    assert.equals([astra, archibaldo], rolando.enemigosQueVence())
+    assert.equals(false, rolando.esPoderoso())
+    }
+    test "Artefacto fatal" {
+        rolando.modificarPoderBase(15)
+        rolando.encuentraArtefacto(espadaDelDestino)
+        rolando.encuentraArtefacto(armaduraDeAceroValyrio)
+        rolando.encuentraArtefacto(collarDivino)
+        assert.equals(espadaDelDestino, rolando.artefactosParaVencer(astra))
+        assert.equals(true, rolando.puedeVencerA(caterina))
+    }
 }
 
