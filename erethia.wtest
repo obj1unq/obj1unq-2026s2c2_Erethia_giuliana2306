@@ -1,39 +1,38 @@
 import rolando.*
 describe "Erethia" {
     test "artefactos en la mochi de Rolando" {
+        rolando.capacidadDeMochila(2)
         rolando.encuentraArtefacto(espadaDelDestino)
         rolando.encuentraArtefacto(libroDeHechizos)
         rolando.encuentraArtefacto(collarDivino)
-        assert.equals([espadaDelDestino, libroDeHechizos], rolando.artefactosEnLaMochila())
+        assert.equals(#{espadaDelDestino, libroDeHechizos}, rolando.artefactosDeLaMochila())
     }
     test "dejar primeros artefactos en el castillo" {
-        rolando.encuentraArtefacto(espadaDelDestino)
-        rolando.encuentraArtefacto(libroDeHechizos)
-        rolando.llegarAlCastillo()
-        assert.equals([espadaDelDestino, libroDeHechizos], castillo.artefactos())
-        rolando.encuentraArtefacto(collarDivino)
-        rolando.llegarAlCastillo()
-        assert.equals([espadaDelDestino, libroDeHechizos, collarDivino], castillo.artefactos())
+       rolando.encuentraArtefacto(espadaDelDestino)
+       rolando.encuentraArtefacto(libroDeHechizos)
+       rolando.llegarAlCastillo()
+       rolando.encuentraArtefacto(collarDivino)
+       rolando.llegarAlCastillo()
+       assert.equals(#{espadaDelDestino, libroDeHechizos,collarDivino}, castillo.artefactos()) 
     }
-    test "que artefactos tiene Rolando" {
-        rolando.encuentraArtefacto(collarDivino)
+    test "Saber qué artefactos tiene Rolando" {
         rolando.encuentraArtefacto(espadaDelDestino)
+        rolando.encuentraArtefacto(collarDivino)
         rolando.llegarAlCastillo()
         rolando.encuentraArtefacto(armaduraDeAceroValyrio)
-        assert.equals([armaduraDeAceroValyrio, collarDivino, espadaDelDestino], rolando.artefactosQueLleva())
-        assert.equals(false, rolando.tieneArtefacto(libroDeHechizos))
+        assert.equals(#{armaduraDeAceroValyrio, espadaDelDestino, collarDivino}, rolando.artefactosEnTotal())
     }
-   test "historia de encuentros con artefactos" {
-    rolando.encuentraArtefacto(espadaDelDestino)
-    rolando.encuentraArtefacto(libroDeHechizos)
-    rolando.encuentraArtefacto(collarDivino)
-    rolando.llegarAlCastillo()
-    rolando.encuentraArtefacto(armaduraDeAceroValyrio)
-    rolando.encuentraArtefacto(collarDivino)
-    assert.equals([espadaDelDestino, libroDeHechizos, collarDivino,
-                   armaduraDeAceroValyrio, collarDivino], rolando.historia())
-                   }
-    test "poder de pelea" {
+    test "Saber la historia de los encuentros con los artefactos" {
+        rolando.encuentraArtefacto(espadaDelDestino)
+        rolando.encuentraArtefacto(libroDeHechizos)
+        rolando.encuentraArtefacto(collarDivino)
+        rolando.llegarAlCastillo()
+        rolando.encuentraArtefacto(armaduraDeAceroValyrio)
+        rolando.encuentraArtefacto(collarDivino)
+        assert.equals([espadaDelDestino, libroDeHechizos, collarDivino, armaduraDeAceroValyrio,collarDivino], 
+                       rolando.historia())
+    }
+    test "Comportamiento de los artefactos" {
         rolando.capacidadDeMochila(3)
         rolando.encuentraArtefacto(espadaDelDestino)
         rolando.encuentraArtefacto(armaduraDeAceroValyrio)
@@ -41,24 +40,33 @@ describe "Erethia" {
         assert.equals(19, rolando.poderDePelea())
     }
     test "batalla" {
-        rolando.cambiarPoderBase(5)
         rolando.capacidadDeMochila(3)
         rolando.encuentraArtefacto(espadaDelDestino)
         rolando.encuentraArtefacto(armaduraDeAceroValyrio)
         rolando.encuentraArtefacto(collarDivino)
         rolando.pelearEnBatalla()
+        assert.equals(18, rolando.poderDePelea())
+        rolando.pelearEnBatalla()
+        assert.equals(21.5, rolando.poderDePelea())
+        rolando.pelearEnBatalla()
+        assert.equals(24, rolando.poderDePelea())
+    }
+    test "Libro de hechizos" {
+        rolando.encuentraArtefacto(espadaDelDestino)
+        rolando.encuentraArtefacto(armaduraDeAceroValyrio)
+        rolando.encuentraArtefacto(collarDivino)
+        rolando.llegarAlCastillo()
+        rolando.encuentraArtefacto(libroDeHechizos)
+        libroDeHechizos.agregarHechizo(bendicion)
+        libroDeHechizos.agregarHechizo(invisibilidad)
+        libroDeHechizos.agregarHechizo(invocacion)
+        assert.equals(4, libroDeHechizos.poderQueAporta(rolando))
+        rolando.pelearEnBatalla()
+        assert.equals(6, libroDeHechizos.poderQueAporta(rolando))
+        rolando.pelearEnBatalla()
+        assert.equals(7, libroDeHechizos.poderQueAporta(rolando))
+        rolando.pelearEnBatalla()
+        assert.equals(0, libroDeHechizos.poderQueAporta(rolando))
     }
 }
 
-/*
-
-#### Ejemplo de batalla: 
-
-- Hacer que Rolando tenga 5 de base y capacidad de 3 artefactos. Entre sus artefactos se encuentran la *espada* 
-(que le aporta 5), la *armadura* (aporta 6) y el *collar* (aporta 3).
-- Luego de la primer batalla Rolando tiene 6 de base, la espada (aporta 6/2 = 3), la armadura (aporta 6) y el 
-collar (aporta 3) 
-- Luego de la segunda batalla Rolando tiene 7 de base, la espada (aporta 7/2 = 3.5), la armadura 6 y el collar (3+2=5)
-7+3.5+6+5 = 11+7=  18+3.5= 21.5
-- Luego de la tercera batalla Rolando tiene 8 de base, la espada (aporta 8/2=4), la armadura 6 y el collar (3+3=6)
-*/

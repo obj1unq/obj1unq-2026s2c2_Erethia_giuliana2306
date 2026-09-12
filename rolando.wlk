@@ -1,135 +1,180 @@
 object rolando {
     var mochila = #{}
     var capacidadDeMochila = 2
-    var totalDeArtefactos = []
-    var historia = []
+    var totalDeArtefactos = #{}
+    var encuentros = []
     var poderBase = 5
 
     method capacidadDeMochila(_capacidadDeMochila) {
         capacidadDeMochila = _capacidadDeMochila
     }
     method encuentraArtefacto(_artefacto) {
-         historia.add(_artefacto)
-        if (mochila.size() < capacidadDeMochila) {
+        encuentros.add(_artefacto)
+        if (mochila.size()  < capacidadDeMochila) {
             mochila.add(_artefacto)
         }
+    }
+    method artefactosDeLaMochila() {
+        return mochila
+    }
+    method llegarAlCastillo() {
+        castillo.guardarArtefactos()
+        mochila.clear()
+    }
+    method artefactosEnTotal() {
+        castillo.artefactos().forEach({artefacto => totalDeArtefactos.add(artefacto)})
+        mochila.forEach({artefacto => totalDeArtefactos.add(artefacto)})
+        return totalDeArtefactos
+    }
+    method posee(_artefacto) {
+        totalDeArtefactos.any({artefacto => artefacto == _artefacto})
+    }
+    method historia() {
+        return encuentros
     }
     method poderBase() {
         return poderBase
     }
-    method historia() {
-        return historia
-    }
-    method artefactosEnLaMochila() {
-        return mochila 
-    }
-    method llegarAlCastillo() {
-        castillo.guardarArtefactos(mochila)
-        mochila.clear()
-    }
-    method agregarArtefactos(_artefactos) {
-        _artefactos.forEach({artefacto => totalDeArtefactos.add(artefacto)})
-    }
-    method artefactosQueLleva() {
-        totalDeArtefactos.clear()
-        self.agregarArtefactos(self.artefactosEnLaMochila())
-        self.agregarArtefactos(castillo.artefactos())
-        return totalDeArtefactos
-    }
-    method tieneArtefacto(_artefacto) {
-        self.artefactosQueLleva()
-        return totalDeArtefactos.any({artefacto => artefacto == _artefacto})
+    method modificarPoderBase(_poder) {
+        poderBase = _poder
     }
     method poderDePelea() {
-        return self.poderBase() + mochila.sum({artefacto => artefacto.poderQueAporta(self)})
+        return poderBase + mochila.sum({artefacto => artefacto.poderQueAporta(self)})
     }
-    method cambiarPoderBase(_poderBase) {
-        poderBase = _poderBase
-    }
-    method pelearEnBatalla ()  {
+    method pelearEnBatalla() {
+        mochila.forEach({artefacto => artefacto.usosDeArtefacto()})
         poderBase = poderBase + 1
-        
     }
 }
-
 
 object espadaDelDestino {
-    var usosDeLaEspada = 0
+    var usos = 0
 
-    method poderQueAporta(personaje) {
-    if (usosDeLaEspada == 0) {
-        usosDeLaEspada = usosDeLaEspada + 1
-        return personaje.poderBase()
-    } else {
-        usosDeLaEspada = usosDeLaEspada + 1
-        return personaje.poderBase() / 2
+    method poderQueAporta(_personaje) { 
+        if (usos == 0) {
+            return _personaje.poderBase()
+        } else {
+            return _personaje.poderBase() / 2
+        }
+    }
+    method usosDeArtefacto() {
+        usos = usos + 1
     }
 }
-}
-
 
 object libroDeHechizos {
     var hechizos = []
 
-    method agregarHechizo(hechizo) {
-        hechizos.add(hechizo)
+    method agregarHechizo(_hechizo) {
+        hechizos.add(_hechizo)
     }
-    method hechizos() {
-        return hechizos
+    method poderQueAporta(_personaje) {
+        if (hechizos != []) {
+            return hechizos.first().poderQueAporta(_personaje))
+        } else {
+          return 0
+        } 
     }
-
+    method usosDeArtefacto() {
+        if (hechizos != []) {
+            hechizos.remove(hechizos.first()) 
+        }
+    }
 }
 
 object bendicion {
 
-    method poderQueAPorta(personaje) {
+    method poderQueAporta(_personaje) {
         return 4
     }
-}
-
-object inivisibilidad {
-
-    method poderQueAporta(personaje) {
-        return personaje.poderBase()
+    method usosDeArtefacto() {
     }
 }
 
+object invisibilidad {
+
+    method poderQueAporta(_personaje) {
+        return _personaje.poderBase()
+    }
+    method usosDeArtefacto() {
+    }
+}
 object invocacion {
 
-    method poderQueAporta(personaje) {
-        (castillo.artefactos().map{artefacto => artefacto.poderQueAPorta(personaje)}).max()
+    method poderQueAporta(_personaje) {
+        if (castillo.artefactos() != []) {
+            return castillo.artefactos().max({artefacto => artefacto.poderQueAporta(_personaje)}).poderQueAporta(_personaje)
+        } else {
+            return 0
+        }
+    method usosDeArtefacto() {
+
     }
 }
-
+}
 object collarDivino {
-    var usoDelCollar = 0
-
-    method poderQueAporta(personaje) {
-        if (personaje.poderBase() > 6) {
-            usoDelCollar = usoDelCollar + 1
-            return 3 * usoDelCollar -1
+    var usos = 0
+    
+    method poderQueAporta(_personaje) {
+        if (_personaje.poderBase() > 6) {
+            return 3 + usos 
         } else {
-            usoDelCollar = usoDelCollar + 1
             return 3
         }
-
+    }
+     method usosDeArtefacto() {
+        usos = usos + 1
     }
 }
 
 object armaduraDeAceroValyrio {
 
-    method poderQueAporta(personaje) {
+    method poderQueAporta(_personaje) {
         return 6
+    }
+    method usosDeArtefacto() {
     }
 }
 
 object castillo {
     var artefactos = #{}
 
-    method artefactos() {
-        return artefactos 
+    method guardarArtefactos() {
+        rolando.artefactosDeLaMochila().forEach({artefacto => artefactos.add(artefacto)})
     }
-    method guardarArtefactos(_mochila) {
-         _mochila.forEach({ artefacto => artefactos.add(artefacto)})
+    method artefactos() {
+        return artefactos
     }
 }
+
+object caterina {
+
+    method poderDePelea() {
+        return 28
+    } 
+    method morada() {
+        return "fortaleza de acero"
+    }
+}
+
+object archibaldo {
+
+    method poderDePelea() {
+        return 16 
+    } 
+    method morada() {
+        return "palacio de marmol"
+    }
+}
+
+object astra {
+
+    method poderDePelea() {
+        return 13 
+    } 
+    method morada() {
+        return "torre de marfil"
+    }
+}
+
+
